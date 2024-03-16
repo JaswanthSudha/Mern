@@ -22,6 +22,19 @@ const getWorkOut=async(req,res)=>{
 //create a new Workout
 const createWorkout=async(req,res)=>{
     const {title,load,reps}=req.body;
+    let emptyFlieds=[]
+    if(!title){
+        emptyFlieds.push("title");
+    }
+    if(!load){
+        emptyFlieds.push("load");
+    }
+    if(!reps){
+        emptyFlieds.push("reps");
+    }
+    if(emptyFlieds.length>0){
+        return res.status(400).json({error:"Please fill All the Fields",emptyFlieds});
+    }
     try{
         const workout=await Workout.create({title,load,reps});
         res.status(200).json(workout);
@@ -41,7 +54,7 @@ const deleteWorkout=async(req,res)=>{
         return res.status(404).json({error:"No Such Workout"});
 
     }
-    res.status(200).json({msg:"Delted",workout:workout})
+    res.status(200).json({workout:workout})
 
 
 }
